@@ -60,6 +60,31 @@
     flex-direction: column;
     gap: var(--space-md);
     
+    .social-links {
+        display: flex;
+        gap: var(--space-md);
+        margin-top: var(--space-sm);
+        
+        .icon-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+            
+            svg {
+                width: 20px;
+                height: 20px;
+                fill: currentColor;
+            }
+            
+            &:hover {
+                color: #FFD700;
+                transform: translateY(-2px);
+            }
+        }
+    }
+    
     .branding-grid {
         height: 50px;
         opacity: 0.5;

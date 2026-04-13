@@ -9,14 +9,39 @@
 *.md text
 *.py text
 *.sh text eol=lf
+*.yml text
+*.yaml text
+*.conf text
 Dockerfile text
 .dockerignore text
+requirements.txt text
 
-*.component.html linguist-language=TypeScript
-*.component.scss linguist-language=TypeScript
+*.ts linguist-language=TypeScript
+*.component.ts linguist-language=TypeScript
+*.html linguist-language=HTML
+*.component.html linguist-language=HTML
+*.scss linguist-language=SCSS
+*.component.scss linguist-language=SCSS
+*.py linguist-language=Python
+*.sh linguist-language=Shell
+*.md linguist-language=Markdown
+*.json linguist-language=JSON
+*.yml linguist-language=YAML
+*.yaml linguist-language=YAML
+*.conf linguist-language=Nginx
+Dockerfile linguist-language=Dockerfile
+docker-compose.yml linguist-language=YAML
 
 *.sh linguist-detectable=true
+*.py linguist-detectable=true
+*.ts linguist-detectable=true
+*.html linguist-detectable=true
+*.scss linguist-detectable=true
 Dockerfile linguist-detectable=true
+
+*.map linguist-generated=true
+frontend/node_modules/** linguist-vendored
+frontend/.angular/** linguist-generated=true
 
 *.png binary
 *.jpg binary

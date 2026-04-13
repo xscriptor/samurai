@@ -1,0 +1,70 @@
+<section class="panel full-width" *ngIf="completedScanDetails">
+  <h2 class="t-heading text-interactive">POST-SCAN TOPOLOGY & FINDINGS (ID #{{ completedScanDetails.id }})</h2>
+  <p class="t-label text-secondary helper-text">Click en cada enlace descubierto para revelar sus vulnerabilidades interceptadas.</p>
+
+  <div class="filters-wrap">
+    <div class="filter-group">
+      <label class="t-label" for="severity-filter">SEVERITY</label>
+      <select id="severity-filter" [(ngModel)]="severityFilter">
+        <option value="all">ALL</option>
+        <option value="critical">CRITICAL</option>
+        <option value="high">HIGH</option>
+        <option value="medium">MEDIUM</option>
+        <option value="low">LOW</option>
+        <option value="info">INFO</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label class="t-label" for="type-filter">FINDING TYPE</label>
+      <select id="type-filter" [(ngModel)]="typeFilter">
+        <option value="all">ALL</option>
+        <option *ngFor="let type of availableTypes" [value]="type">{{ type }}</option>
+      </select>
+    </div>
+
+    <button class="btn-reset" type="button" (click)="resetFilters()" [disabled]="!hasActiveFilters">RESET FILTERS</button>
+  </div>
+
+  <div *ngIf="completedScanDetails.discovered_links?.length === 0" class="t-body text-secondary">
+    No sub-links were discovered on this target.
+  </div>
+
+  <div class="t-label text-secondary" *ngIf="filteredLinks.length">
+    MATCHED_LINKS: {{ filteredLinks.length }} | MATCHED_FINDINGS: {{ severityCount(filteredLinks) }}
+  </div>
+
+  <div class="t-body text-secondary" *ngIf="!filteredLinks.length">
+    No results for current filters.
+  </div>
+
+  <details class="nothing-accordion" *ngFor="let link of filteredLinks">
+    <summary>
+      <div class="summary-info">
+        <span class="t-label status-code">{{ link.status_code }} HTTP</span>
+        <span class="t-body">{{ link.url }}</span>
+      </div>
+      <span class="badge warning" *ngIf="link.findings?.length">! {{ link.findings.length }} Issues</span>
+      <span class="badge success" *ngIf="!link.findings?.length">Clean</span>
+    </summary>
+
+    <div class="accordion-content">
+      <span class="t-label text-secondary">Content-Type: {{ link.content_type }}</span>
+      <div *ngIf="!link.findings?.length" class="t-body empty-node">No vulnerabilities detected on this specific node.</div>
+
+      <div class="finding-row" *ngFor="let vf of link.findings">
+        <div class="severity-dot" [ngClass]="vf.severity"></div>
+        <div class="finding-texts">
+          <span class="t-label">[{{ vf.finding_type }}]</span>
+          <span class="badge" *ngIf="vf.cvss_score">CVSS: {{ vf.cvss_score }}</span>
+          <span class="t-body finding-description">{{ vf.description }}</span>
+
+          <div class="poc-block" *ngIf="vf.poc_payload">
+            <span class="t-label text-secondary">PROOF OF CONCEPT:</span>
+            <pre>{{ vf.poc_payload }}</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </details>
+</section>

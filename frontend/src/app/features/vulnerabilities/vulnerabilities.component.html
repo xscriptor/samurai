@@ -1,78 +1,42 @@
 <div class="route-container">
-    <header class="section-header">
-      <div>
-        <h2 class="t-heading">DAST_SCANNER</h2>
-        <span class="t-label">DYNAMIC APPLICATION SECURITY TESTING</span>
-      </div>
-      
-      <div class="system-status">
-        <div class="status-dot" [style.background-color]="isScanning ? 'var(--warning)' : 'var(--success)'"></div>
-        <span class="t-label">{{ isScanning ? 'CRAWLING...' : 'MODULE READY' }}</span>
-      </div>
-    </header>
-  
-    <div class="dashboard-grid">
-      <!-- Módulo de configuración -->
-      <section class="panel">
-        <h2 class="t-heading">TARGET_URL</h2>
-        
-        <div class="input-group">
-          <label class="t-label">FULL ENDPOINT URL</label>
-          <input type="text" [(ngModel)]="targetUrl" [disabled]="isScanning">
-        </div>
-        
-        <button class="btn-primary destructive" (click)="initiateCrawl()" [disabled]="isScanning">
-          {{ isScanning ? 'DAST SCAN IN PROGRESS' : 'INITIATE DAST SCAN' }}
-        </button>
-      </section>
-  
-      <!-- Terminal Live del Crawler -->
-      <section class="panel terminal-panel">
-          <h2 class="t-label terminal-head">DAST_ENGINE_STDOUT</h2>
-          <div class="nothing-term" #scrollMe [scrollTop]="scrollMe.scrollHeight">
-              <pre *ngFor="let line of terminalLogs">{{ line }}</pre>
-              <div class="cursor" *ngIf="isScanning" style="display:inline-block; vertical-align: bottom;"></div>
-          </div>
-      </section>
-
-      <!-- RESULTS ACCORDIONS (Se mapea desde la base de datos tras el escaneo) -->
-      <section class="panel full-width" *ngIf="completedScanDetails">
-        <h2 class="t-heading text-interactive">POST-SCAN TOPOLOGY & FINDINGS (ID #{{completedScanDetails.id}})</h2>
-        <p class="t-label text-secondary" style="margin-bottom: 1rem;">Click en cada enlace descubierto para revelar sus vulnerabilidades interceptadas.</p>
-        
-        <div *ngIf="completedScanDetails.discovered_links?.length === 0" class="t-body text-secondary">
-           No sub-links were discovered on this target.
-        </div>
-
-        <details class="nothing-accordion" *ngFor="let link of completedScanDetails.discovered_links">
-            <summary>
-                <div class="summary-info">
-                   <span class="t-label status-code">{{link.status_code}} HTTP</span>
-                   <span class="t-body">{{link.url}}</span>
-                </div>
-                <span class="badge warning" *ngIf="link.findings?.length">! {{link.findings.length}} Issues</span>
-                <span class="badge success" *ngIf="!link.findings?.length">Clean</span>
-            </summary>
-            
-            <div class="accordion-content">
-                <span class="t-label text-secondary">Content-Type: {{link.content_type}}</span>
-                <div *ngIf="!link.findings?.length" class="t-body" style="opacity: 0.7;">No vulnerabilities detected on this specific node.</div>
-                
-                <div class="finding-row" *ngFor="let vf of link.findings" style="flex-wrap: wrap;">
-                   <div class="severity-dot" [ngClass]="vf.severity"></div>
-                   <div class="finding-texts" style="width: 100%">
-                      <span class="t-label">[{{vf.finding_type}}]</span>
-                      <span class="badge" *ngIf="vf.cvss_score" style="margin-left: 0.5rem;">CVSS: {{vf.cvss_score}}</span>
-                      <span class="t-body" style="display: block; margin-top: 0.25rem;">{{vf.description}}</span>
-                      
-                      <div class="poc-block" *ngIf="vf.poc_payload" style="margin-top: 0.5rem;">
-                        <span class="t-label text-secondary">PROOF OF CONCEPT:</span>
-                        <pre style="background: rgba(255,255,255,0.05); padding: 0.5rem; font-family: monospace; white-space: pre-wrap; font-size: 0.8em; margin-top: 0.25rem;">{{vf.poc_payload}}</pre>
-                      </div>
-                   </div>
-                </div>
-            </div>
-        </details>
-      </section>
+  <header class="section-header">
+    <div>
+      <h2 class="t-heading">DAST_SCANNER</h2>
+      <span class="t-label">DYNAMIC APPLICATION SECURITY TESTING</span>
     </div>
+
+    <div class="system-status">
+      <div class="status-dot" [style.background-color]="isScanning ? 'var(--warning)' : 'var(--success)'"></div>
+      <span class="t-label">{{ isScanning ? 'CRAWLING...' : 'MODULE READY' }}</span>
+    </div>
+  </header>
+
+  <div class="dashboard-grid">
+    <app-vuln-target-config
+      [isScanning]="isScanning"
+      [targetUrl]="targetUrl"
+      [activeModules]="activeModules"
+      [moduleOptions]="moduleOptions"
+      (targetUrlChange)="targetUrl = $event"
+      (moduleToggle)="toggleModule($event)"
+      (initiate)="initiateCrawl()"
+    ></app-vuln-target-config>
+
+    <app-vuln-terminal-output
+      [title]="'DAST_ENGINE_STDOUT'"
+      [terminalLogs]="terminalLogs"
+      [isScanning]="isScanning"
+    ></app-vuln-terminal-output>
+
+    <app-vuln-analysis-summary
+      [summary]="analysisSummary"
+      [trendSnapshots]="trendSnapshots"
+      [trendPolylinePoints]="trendPolylinePoints"
+      [trendLatestDelta]="trendLatestDelta"
+    ></app-vuln-analysis-summary>
+
+    <app-vuln-findings-report
+      [completedScanDetails]="completedScanDetails"
+    ></app-vuln-findings-report>
   </div>
+</div>

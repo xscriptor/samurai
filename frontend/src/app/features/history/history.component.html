@@ -13,7 +13,7 @@
         <h2 class="t-heading">SAVED_SCANS_LIST</h2>
         <div *ngIf="isLoading" class="t-label">Loading database...</div>
 
-        <div class="scan-card" *ngFor="let s of scans" (click)="viewDetails(s.id)" [class.active]="selectedScan?.id === s.id">
+        <div class="scan-card" *ngFor="let s of scans" (click)="openScanInModule(s)" [class.active]="selectedScan?.id === s.id">
             <div class="scan-header">
                 <span class="t-label text-interactive">ID_#{{s.id}}</span>
                 <button class="btn-sm destructive" (click)="deleteScan(s.id, $event)">DELETE</button>

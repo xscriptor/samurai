@@ -1,0 +1,7 @@
+<section class="panel terminal-panel">
+  <h2 class="t-label terminal-head">{{ title }}</h2>
+  <div class="nothing-term" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+    <pre *ngFor="let line of terminalLogs">{{ line }}</pre>
+    <div class="cursor" *ngIf="isScanning"></div>
+  </div>
+</section>

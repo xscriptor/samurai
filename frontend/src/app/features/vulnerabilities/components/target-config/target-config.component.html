@@ -1,0 +1,34 @@
+<section class="panel">
+  <h2 class="t-heading">TARGET_URL</h2>
+
+  <div class="input-group">
+    <label class="t-label">FULL ENDPOINT URL</label>
+    <input
+      type="text"
+      [ngModel]="targetUrl"
+      (ngModelChange)="targetUrlChange.emit($event)"
+      [disabled]="isScanning"
+    >
+  </div>
+
+  <div class="modules-group">
+    <label class="t-label">ANALYSIS MODULES</label>
+    <div class="module-grid">
+      <button
+        type="button"
+        class="module-chip"
+        *ngFor="let module of moduleOptions"
+        [class.active]="activeModules[module.key]"
+        [disabled]="isScanning"
+        (click)="moduleToggle.emit(module.key)"
+      >
+        <span class="t-label">{{ module.label }}</span>
+        <span class="chip-help">{{ module.description }}</span>
+      </button>
+    </div>
+  </div>
+
+  <button class="btn-primary destructive" (click)="initiate.emit()" [disabled]="isScanning">
+    {{ isScanning ? 'DAST SCAN IN PROGRESS' : 'INITIATE DAST SCAN' }}
+  </button>
+</section>

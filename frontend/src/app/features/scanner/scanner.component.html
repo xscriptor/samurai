@@ -1,0 +1,44 @@
+<div class="route-container">
+  <header class="section-header">
+    <div>
+      <h2 class="t-heading">NETWORK_SCANNER</h2>
+      <span class="t-label">NATIVE NMAP ASYNC WORKER</span>
+    </div>
+    
+    <div class="system-status">
+      <div class="status-dot" [style.background-color]="isScanning ? 'var(--warning)' : 'var(--success)'"></div>
+      <span class="t-label">{{ isScanning ? 'SCANNING...' : 'MODULE READY' }}</span>
+    </div>
+  </header>
+
+  <div class="dashboard-grid">
+    <section class="panel">
+      <h2 class="t-heading">TARGET_CONFIG</h2>
+      
+      <div class="input-group">
+        <label class="t-label">DOMAIN / IP</label>
+        <input type="text" [(ngModel)]="targetDomain" [disabled]="isScanning">
+      </div>
+      
+      <button class="btn-primary destructive" (click)="initiateScan()" [disabled]="isScanning">
+        {{ isScanning ? 'SCAN IN PROGRESS' : 'INITIATE SCAN' }}
+      </button>
+    </section>
+
+    <section class="panel">
+      <div class="hero-metric">
+        <span class="t-label">PORTS_FOUND</span>
+        <span class="t-display-xl">{{ vulnerabilitiesFound }}</span>
+      </div>
+    </section>
+
+    <section class="panel terminal-panel" style="grid-column: 1 / -1;">
+        <h2 class="t-label terminal-head">LIVE_TERMINAL_OUTPUT</h2>
+        
+        <div class="nothing-term" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+            <pre *ngFor="let line of terminalLogs">{{ line }}</pre>
+            <div class="cursor" *ngIf="isScanning" style="display:inline-block; vertical-align: bottom;"></div>
+        </div>
+    </section>
+  </div>
+</div>

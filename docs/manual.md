@@ -22,7 +22,15 @@
 
 <pre><code>docker compose up -d --build</code></pre>
 
-<h3>1.3 Accessing the Services</h3>
+<h3>1.3 Running Locally (Without Docker) / IDE Setup</h3>
+<p>If you wish to run the Angular app manually or simply want your IDE (like VSCode) to stop highlighting TypeScript errors, you must install the Node dependencies locally on your host machine:</p>
+<ol>
+    <li>Navigate to the frontend folder: <code>cd frontend/</code></li>
+    <li>Install packages: <code>npm install</code></li>
+    <li>To spin up the web server manually without Docker: <code>npm run start</code> (The frontend will boot up at <code>localhost:4200</code>)</li>
+</ol>
+
+<h3>1.4 Accessing the Services</h3>
 <ul>
     <li><strong>Frontend (Angular UI):</strong> Accessible at <code>http://localhost:4200</code></li>
     <li><strong>Backend API (FastAPI):</strong> Accessible at <code>http://localhost:8000/docs</code> (Swagger UI)</li>

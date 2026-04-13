@@ -1,0 +1,42 @@
+<div class="route-container">
+  <header class="section-header">
+    <div>
+      <h2 class="t-heading">DAST_SCANNER</h2>
+      <span class="t-label">DYNAMIC APPLICATION SECURITY TESTING</span>
+    </div>
+
+    <div class="system-status">
+      <div class="status-dot" [style.background-color]="isScanning ? 'var(--warning)' : 'var(--success)'"></div>
+      <span class="t-label">{{ isScanning ? 'CRAWLING...' : 'MODULE READY' }}</span>
+    </div>
+  </header>
+
+  <div class="dashboard-grid">
+    <app-vuln-target-config
+      [isScanning]="isScanning"
+      [targetUrl]="targetUrl"
+      [activeModules]="activeModules"
+      [moduleOptions]="moduleOptions"
+      (targetUrlChange)="targetUrl = $event"
+      (moduleToggle)="toggleModule($event)"
+      (initiate)="initiateCrawl()"
+    ></app-vuln-target-config>
+
+    <app-vuln-terminal-output
+      [title]="'DAST_ENGINE_STDOUT'"
+      [terminalLogs]="terminalLogs"
+      [isScanning]="isScanning"
+    ></app-vuln-terminal-output>
+
+    <app-vuln-analysis-summary
+      [summary]="analysisSummary"
+      [trendSnapshots]="trendSnapshots"
+      [trendPolylinePoints]="trendPolylinePoints"
+      [trendLatestDelta]="trendLatestDelta"
+    ></app-vuln-analysis-summary>
+
+    <app-vuln-findings-report
+      [completedScanDetails]="completedScanDetails"
+    ></app-vuln-findings-report>
+  </div>
+</div>

@@ -1,0 +1,87 @@
+<div class="route-container">
+  <header class="section-header">
+    <div>
+      <h2 class="t-heading">ARCHIVE_HISTORY</h2>
+      <span class="t-label">PERSISTENT SCAN DATABASE</span>
+    </div>
+  </header>
+
+  <div class="dashboard-grid archive-grid">
+    
+    <!-- LEFT: Listado de Scans -->
+    <section class="panel list-panel">
+        <h2 class="t-heading">SAVED_SCANS_LIST</h2>
+        <div *ngIf="isLoading" class="t-label">Loading database...</div>
+
+        <div class="scan-card" *ngFor="let s of scans" (click)="openScanInModule(s)" [class.active]="selectedScan?.id === s.id">
+            <div class="scan-header">
+                <span class="t-label text-interactive">ID_#{{s.id}}</span>
+                <button class="btn-sm destructive" (click)="deleteScan(s.id, $event)">DELETE</button>
+            </div>
+            <div class="scan-body">
+                <span class="t-heading">{{s.domain_target}}</span>
+                <span class="t-label badge" [ngClass]="s.status === 'COMPLETED' ? 'text-success' : 'text-warning'">[{{s.status}}]</span>
+                <span class="t-label text-secondary">TYPE: {{s.scan_type | uppercase}}</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- RIGHT: Detalle de ese Scan -->
+    <section class="panel detail-panel">
+        <h2 class="t-heading">SCAN_REPORTS</h2>
+        
+        <div *ngIf="!selectedScan" class="empty-state t-label">
+            [ SELECT A SCAN TO VIEW REPORTS ]
+        </div>
+
+        <div *ngIf="selectedScan" class="detail-view">
+            <h3 class="t-display-md" style="margin-bottom: 0;">{{selectedScan.domain_target}}</h3>
+            <span class="t-label text-secondary" style="margin-bottom: 1rem; display: block;">DATE: {{selectedScan.created_at}}</span>
+
+            <!-- Findings Directos (Nmap ports) -->
+            <div *ngIf="selectedScan.findings?.length" class="report-section">
+                <h4 class="t-label">SURFACE METRICS (PORTS/GENERAL)</h4>
+                <div class="finding-row" *ngFor="let f of selectedScan.findings" style="flex-wrap: wrap;">
+                   <div class="severity-dot" [ngClass]="f.severity"></div>
+                   <div style="width: 100%">
+                       <span>[{{f.finding_type}}]</span>
+                       <span *ngIf="f.cvss_score" class="badge" style="margin-left: 0.5rem;">CVSS: {{f.cvss_score}}</span>
+                       <pre class="desc-box">{{f.description}}</pre>
+                       <div *ngIf="f.poc_payload" style="margin-top: 0.5rem;">
+                            <span class="t-label text-secondary">PROOF OF CONCEPT:</span>
+                            <pre class="desc-box" style="white-space: pre-wrap;">{{f.poc_payload}}</pre>
+                       </div>
+                   </div>
+                </div>
+            </div>
+
+            <!-- Discovered Links (Crawler) -->
+            <div *ngIf="selectedScan.discovered_links?.length" class="report-section">
+                <h4 class="t-label">DISCOVERED TOPOLOGY (CRAWLER)</h4>
+                
+                <details class="nothing-accordion" *ngFor="let link of selectedScan.discovered_links">
+                    <summary>
+                        <span class="t-label">{{link.status_code}} HTTP</span>
+                        <span class="t-body">{{link.url}}</span>
+                        <span class="badge warning" *ngIf="link.findings?.length">! {{link.findings.length}} Issues</span>
+                    </summary>
+                    <div class="accordion-content">
+                        <span class="t-label text-secondary">Content-Type: {{link.content_type}}</span>
+                        <div class="finding-row" *ngFor="let vf of link.findings" style="flex-wrap: wrap;">
+                           <div class="severity-dot" [ngClass]="vf.severity"></div>
+                           <div style="width: 100%">
+                               <span>[{{vf.finding_type}}] {{vf.description}}</span>
+                               <span *ngIf="vf.cvss_score" class="badge" style="margin-left: 0.5rem;">CVSS: {{vf.cvss_score}}</span>
+                               <div *ngIf="vf.poc_payload" style="margin-top: 0.5rem;">
+                                    <span class="t-label text-secondary">PROOF OF CONCEPT:</span>
+                                    <pre class="desc-box" style="white-space: pre-wrap;">{{vf.poc_payload}}</pre>
+                               </div>
+                           </div>
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+  </div>
+</div>

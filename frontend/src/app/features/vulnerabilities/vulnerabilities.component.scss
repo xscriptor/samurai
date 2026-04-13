@@ -1,0 +1,44 @@
+/* Reuse global struct styles manually for the standalone component isolation */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: var(--space-md);
+    margin-bottom: var(--space-xl);
+}
+
+.system-status {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    .status-dot {
+        width: 8px; height: 8px; border-radius: 50%;
+    }
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: var(--space-xl);
+
+    > * {
+        min-width: 0;
+    }
+}
+
+.route-container {
+    overflow-x: clip;
+}
+
+@media (max-width: 900px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-sm);
+    }
+}

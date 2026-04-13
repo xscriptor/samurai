@@ -1,0 +1,157 @@
+.section-header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: var(--space-md);
+    margin-bottom: var(--space-xl);
+}
+
+.archive-grid {
+    grid-template-columns: 350px 1fr !important;
+}
+
+.panel {
+    padding: var(--space-lg);
+    border: 1px solid var(--border-visible);
+    background-color: var(--surface);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+/* LIST PANEL */
+.scan-card {
+    border: 1px solid var(--border-visible);
+    padding: var(--space-md);
+    background-color: var(--black);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    &:hover {
+        border-color: var(--text-primary);
+    }
+    &.active {
+        border-color: var(--interactive);
+        background-color: var(--surface-raised);
+    }
+}
+.scan-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: var(--space-xs);
+    margin-bottom: var(--space-sm);
+}
+
+.scan-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+/* DETAIL PANEL */
+.empty-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    opacity: 0.5;
+}
+
+.report-section {
+    margin-top: var(--space-xl);
+    border-top: 1px dashed var(--border);
+    padding-top: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.finding-row {
+    background-color: var(--black);
+    border: 1px solid var(--border-visible);
+    padding: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    
+    .desc-box {
+        margin: 0;
+        margin-top: var(--space-sm);
+        padding: var(--space-sm);
+        background-color: var(--surface-raised);
+        font-family: var(--font-data);
+        font-size: var(--body-sm);
+    }
+}
+
+/* ACCORDIONS PARA ENLACES DESCUBIERTOS */
+.nothing-accordion {
+    border: 1px solid var(--border-visible);
+    background-color: var(--black);
+    margin-bottom: var(--space-sm);
+    
+    summary {
+        padding: var(--space-md);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: var(--space-md);
+        list-style: none; /* Hide default arrow */
+        
+        &:hover {
+            background-color: var(--surface-raised);
+        }
+        
+        &::-webkit-details-marker {
+          display: none;
+        }
+    }
+    
+    .accordion-content {
+        border-top: 1px solid var(--border-visible);
+        padding: var(--space-md);
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-sm);
+    }
+}
+
+.badge {
+    padding: 2px 6px;
+    border: 1px solid currentColor;
+    font-size: var(--body-sm);
+    display: inline-block;
+    
+    &.warning {
+        color: var(--warning);
+    }
+    &.info {
+        color: var(--interactive);
+    }
+}
+
+.severity-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    &.high { background-color: var(--accent); }
+    &.info { background-color: var(--interactive); }
+    &.low { background-color: var(--success); }
+}
+
+.btn-sm {
+    background-color: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border-visible);
+    font-family: var(--font-data);
+    font-size: var(--body-sm);
+    cursor: pointer;
+    
+    &.destructive:hover {
+        background-color: var(--accent);
+        color: var(--black);
+        border-color: var(--accent);
+    }
+}

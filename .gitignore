@@ -1,0 +1,49 @@
+# =============================
+# Docker & Containers
+# =============================
+# Ignore docker data volumes
+*db_data/
+*redis_data/
+
+# Environments
+.env
+.env.local
+
+# =============================
+# Node / Angular (Frontend)
+# =============================
+node_modules/
+dist/
+tmp/
+out-tsc/
+bazel-out/
+
+# Angular specific
+.angular/
+.nx/
+coverage/
+
+# =============================
+# Python / FastAPI (Backend)
+# =============================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# =============================
+# OS generated files
+# =============================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

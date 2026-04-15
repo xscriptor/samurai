@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { ThemeService } from './services/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +10,14 @@ import { RouterModule } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
-  // Logic is now removed. App component acts purely as a Layout Shell.
+export class AppComponent implements OnInit {
+  constructor(public themeService: ThemeService) {}
+
+  ngOnInit(): void {
+    this.themeService.initTheme();
+  }
+
+  toggleTheme(): void {
+    this.themeService.toggleTheme();
+  }
 }

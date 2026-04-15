@@ -84,6 +84,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+body.theme-transitioning,
+body.theme-transitioning *,
+body.theme-transitioning *::before,
+body.theme-transitioning *::after {
+  transition-property: background-color, color, border-color, fill, stroke, box-shadow;
+  transition-duration: 0.26s;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 /* Typography Classes */
 .t-display-xl { font-family: var(--font-display); font-size: var(--display-xl); line-height: 1.0; letter-spacing: -0.03em; color: var(--text-display); }
 .t-display-lg { font-family: var(--font-display); font-size: var(--display-lg); line-height: 1.05; letter-spacing: -0.02em; color: var(--text-display); }

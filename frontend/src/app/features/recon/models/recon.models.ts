@@ -7,6 +7,22 @@ export interface ReconModule {
   description: string;
 }
 
+export type ReconResultsViewId =
+  | 'all'
+  | 'surface-map'
+  | 'dns'
+  | 'subdomains'
+  | 'apis'
+  | 'auth-session'
+  | 'headers'
+  | 'client-side'
+  | 'tech';
+
+export interface ReconResultsViewOption {
+  id: ReconResultsViewId;
+  label: string;
+}
+
 export interface ReconEnvelope {
   type: 'RECON_COMPLETE' | 'RECON_ERROR';
   target: string;

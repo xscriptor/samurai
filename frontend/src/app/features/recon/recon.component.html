@@ -20,9 +20,7 @@
 
   <app-recon-terminal [lines]="terminalLines" [isScanning]="isScanning"></app-recon-terminal>
 
-  <app-recon-results [results]="reconResults"></app-recon-results>
-
-  <section class="recon-export-zone" *ngIf="reconResults">
+  <section class="recon-actions-zone" *ngIf="reconResults">
     <app-recon-export-actions
       [hasExports]="!!reconResults"
       (exportCsv)="exportReconAsCsv()"
@@ -30,5 +28,27 @@
       (exportPdf)="exportReconAsPdf()"
       (exportBinary)="exportReconAsBinary()"
     ></app-recon-export-actions>
+
+    <div class="recon-filter-zone">
+      <span class="t-label">[ RESULT VIEW ]</span>
+      <div class="recon-filter-list" role="tablist" aria-label="Results section filter">
+        <button
+          *ngFor="let option of resultsViewOptions"
+          type="button"
+          class="btn-reset recon-filter-btn"
+          [class.active]="activeResultsView === option.id"
+          [attr.aria-selected]="activeResultsView === option.id"
+          (click)="setResultsView(option.id)"
+        >
+          {{ option.label }}
+        </button>
+      </div>
+    </div>
   </section>
+
+  <app-recon-results
+    [results]="reconResults"
+    [targetDomain]="targetDomain"
+    [activeFilter]="activeResultsView"
+  ></app-recon-results>
 </div>

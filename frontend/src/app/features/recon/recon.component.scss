@@ -22,8 +22,77 @@
   font-size: 0.85rem;
 }
 
-.recon-export-zone {
+.recon-actions-zone {
   margin-top: var(--space-lg);
   padding-top: var(--space-md);
   border-top: 1px solid var(--border);
+  display: grid;
+  gap: var(--space-md);
+}
+
+.recon-filter-zone {
+  display: grid;
+  gap: var(--space-xs);
+  border: 1px solid var(--border-visible);
+  background: var(--surface);
+  padding: var(--space-sm);
+}
+
+.recon-filter-zone .t-label {
+  color: var(--text-primary);
+}
+
+.recon-filter-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.recon-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.1rem;
+  border: 1px solid var(--border-visible);
+  background: var(--surface-raised);
+  padding: 0.4rem 0.75rem;
+  font-family: var(--font-data);
+  font-size: var(--caption);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+    color: var(--text-display);
+    border-color: var(--interactive);
+    background: var(--surface);
+  }
+
+  &.active {
+    opacity: 1;
+    color: #000000;
+    background: var(--interactive);
+    border-color: var(--interactive);
+    font-weight: 600;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--interactive);
+    outline-offset: 2px;
+  }
+}
+
+@media (max-width: 900px) {
+  .recon-filter-list {
+    gap: var(--space-xs);
+  }
+
+  .recon-filter-btn {
+    width: 100%;
+    justify-content: flex-start;
+  }
 }

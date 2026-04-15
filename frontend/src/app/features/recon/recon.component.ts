@@ -9,7 +9,14 @@ import { ReconControlsComponent } from './components/controls/recon-controls.com
 import { ReconTerminalComponent } from './components/terminal/recon-terminal.component';
 import { ReconResultsComponent } from './components/results/recon-results.component';
 import { ReconExportActionsComponent } from './components/export-actions/recon-export-actions.component';
-import { ReconEnvelope, ReconModule, ReconModuleId, ReconResults } from './models/recon.models';
+import {
+  ReconEnvelope,
+  ReconModule,
+  ReconModuleId,
+  ReconResults,
+  ReconResultsViewId,
+  ReconResultsViewOption
+} from './models/recon.models';
 import { ReconLiveService } from './services/recon-live.service';
 
 interface ReconHistoryFinding {
@@ -45,7 +52,20 @@ export class ReconComponent implements OnInit, OnDestroy {
   terminalLines: string[] = [];
   reconResults: ReconResults | null = null;
   selectedModules: ReconModuleId[] = ['all'];
+  activeResultsView: ReconResultsViewId = 'all';
   private destroyed = false;
+
+  resultsViewOptions: ReconResultsViewOption[] = [
+    { id: 'all', label: 'ALL' },
+    { id: 'surface-map', label: 'SURFACE MAP' },
+    { id: 'dns', label: 'DNS' },
+    { id: 'subdomains', label: 'SUBDOMAINS' },
+    { id: 'apis', label: 'API' },
+    { id: 'auth-session', label: 'AUTH/SESSION' },
+    { id: 'headers', label: 'HEADERS' },
+    { id: 'client-side', label: 'CLIENT SIDE' },
+    { id: 'tech', label: 'TECH STACK' }
+  ];
 
   reconModules: ReconModule[] = [
     {
@@ -138,6 +158,7 @@ export class ReconComponent implements OnInit, OnDestroy {
   clearTerminal() {
     this.terminalLines = [];
     this.reconResults = null;
+    this.activeResultsView = 'all';
   }
 
   startRecon() {
@@ -146,6 +167,7 @@ export class ReconComponent implements OnInit, OnDestroy {
     this.isScanning = true;
     this.terminalLines = [];
     this.reconResults = null;
+    this.activeResultsView = 'all';
 
     this.reconLiveService.connect(this.targetDomain, this.selectedModules, {
       onLog: (line) => this.addTerminalLine(line),
@@ -226,9 +248,14 @@ export class ReconComponent implements OnInit, OnDestroy {
     URL.revokeObjectURL(url);
   }
 
+  setResultsView(view: ReconResultsViewId): void {
+    this.activeResultsView = view;
+  }
+
   private loadReconFromHistory(scanId: number): void {
     this.reconLiveService.disconnect();
     this.isScanning = false;
+    this.activeResultsView = 'all';
 
     this.http.get<ReconHistoryScanDetail>(`http://${window.location.hostname}:8000/api/scans/${scanId}`).subscribe({
       next: (detail) => {
@@ -304,6 +331,7 @@ export class ReconComponent implements OnInit, OnDestroy {
     return {
       target: this.targetDomain,
       selectedModules: this.selectedModules,
+      activeResultsView: this.activeResultsView,
       exportedAt: new Date().toISOString(),
       terminalLines: [...this.terminalLines],
       results: this.reconResults,

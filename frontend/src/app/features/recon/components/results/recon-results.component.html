@@ -3,33 +3,34 @@
     <div>
       <h3 class="t-label">[ RECON RESULTS ]</h3>
       <p class="results-copy">Signal-first distribution: one primary metric, compact telemetry, and module outputs below.</p>
+      <p *ngIf="activeFilter !== 'all'" class="results-filter-copy">Filtered view: {{ activeFilterLabel() }}</p>
     </div>
     <div class="results-status" [class.empty]="!hasAnyResults()">
       {{ hasAnyResults() ? 'ANALYZED' : 'NO SIGNALS' }}
     </div>
   </header>
 
-  <div class="overview-grid">
+  <div class="overview-grid" *ngIf="isAllView()">
     <article class="hero-panel dot-grid-subtle">
       <span class="t-label">PRIMARY SIGNAL</span>
       <div class="hero-value">
         <span class="value">{{ availableSections() }}</span>
-        <span class="unit">/5</span>
+        <span class="unit">/{{ totalSections() }}</span>
       </div>
       <p class="hero-copy">modules produced actionable output</p>
       <div class="hero-divider"></div>
       <div class="hero-rows">
         <div class="hero-row">
-          <span class="metric-label">SUBDOMAINS</span>
-          <span class="metric-value">{{ subdomainTotal() }}</span>
+          <span class="metric-label">SURFACE HOSTS</span>
+          <span class="metric-value">{{ surfaceHosts().length }}</span>
         </div>
         <div class="hero-row">
-          <span class="metric-label">API SIGNALS</span>
-          <span class="metric-value">{{ apiTotal() }}</span>
+          <span class="metric-label">AUTH CONTROLS</span>
+          <span class="metric-value">{{ authSessionPresentControls().length }}</span>
         </div>
         <div class="hero-row">
-          <span class="metric-label">TECH SIGNALS</span>
-          <span class="metric-value">{{ techSignalTotal() }}</span>
+          <span class="metric-label">CLIENT SIGNALS</span>
+          <span class="metric-value">{{ clientSideFrameworkSignals().length + clientSideAssetSignals().length + clientSideRouteSignals().length }}</span>
         </div>
       </div>
     </article>
@@ -65,11 +66,178 @@
         <span class="metric-value">{{ techSignalTotal() }}</span>
         <span class="metric-note">frontend, backend, cdn</span>
       </div>
+      <div class="metric-row">
+        <span class="metric-label">AUTH/SESSION RISK</span>
+        <span class="metric-value">{{ authSessionRiskLevel() }}</span>
+        <span class="metric-note">{{ authSessionMissingControls().length }} missing controls</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">CLIENT-SIDE EXPOSURE</span>
+        <span class="metric-value">{{ clientSideWarnings().length }}</span>
+        <span class="metric-note">heuristic warnings from passive signals</span>
+      </div>
     </section>
   </div>
 
   <div class="module-stack">
-    <section class="module-section">
+    <section class="module-section" *ngIf="shouldShow('surface-map')">
+      <div class="module-header">
+        <div>
+          <span class="module-name">SURFACE MAP</span>
+          <p>Cross-view of hosts, endpoints, and technology traces to prioritize exploration paths quickly.</p>
+        </div>
+        <span class="module-badge">{{ surfaceHosts().length }} HOSTS</span>
+      </div>
+
+      <div class="insight-grid">
+        <article class="insight-tile">
+          <span class="tile-label">HOSTS</span>
+          <span class="tile-value">{{ surfaceHosts().length }}</span>
+          <span class="tile-copy">inventory nodes</span>
+        </article>
+        <article class="insight-tile">
+          <span class="tile-label">ENDPOINTS</span>
+          <span class="tile-value">{{ surfaceEndpoints().length }}</span>
+          <span class="tile-copy">api + docs signals</span>
+        </article>
+        <article class="insight-tile">
+          <span class="tile-label">TECH SIGNALS</span>
+          <span class="tile-value">{{ surfaceTechSignals().length }}</span>
+          <span class="tile-copy">fingerprint artifacts</span>
+        </article>
+        <article class="insight-tile">
+          <span class="tile-label">HEADER GAPS</span>
+          <span class="tile-value">{{ headerMissingTotal() }}</span>
+          <span class="tile-copy">hardening opportunities</span>
+        </article>
+      </div>
+
+      <div class="signal-lists">
+        <article class="signal-group">
+          <span class="signal-title">HOST INVENTORY</span>
+          <div class="signal-chip-wrap" *ngIf="surfaceHosts().length > 0; else noSurfaceHosts">
+            <span class="signal-chip" *ngFor="let host of surfaceHosts()">{{ host }}</span>
+          </div>
+        </article>
+
+        <article class="signal-group">
+          <span class="signal-title">DISCOVERED ENDPOINTS</span>
+          <div class="signal-chip-wrap" *ngIf="surfaceEndpoints().length > 0; else noSurfaceEndpoints">
+            <span class="signal-chip" *ngFor="let endpoint of surfaceEndpoints()">{{ endpoint }}</span>
+          </div>
+        </article>
+
+        <article class="signal-group">
+          <span class="signal-title">TECH CLUES</span>
+          <div class="signal-chip-wrap" *ngIf="surfaceTechSignals().length > 0; else noSurfaceTech">
+            <span class="signal-chip" *ngFor="let signal of surfaceTechSignals()">{{ signal }}</span>
+          </div>
+        </article>
+      </div>
+
+      <ng-template #noSurfaceHosts>
+        <div class="signal-empty">No host inventory available for this run.</div>
+      </ng-template>
+      <ng-template #noSurfaceEndpoints>
+        <div class="signal-empty">No endpoint traces were captured.</div>
+      </ng-template>
+      <ng-template #noSurfaceTech>
+        <div class="signal-empty">No technology clues available.</div>
+      </ng-template>
+    </section>
+
+    <section class="module-section" *ngIf="shouldShow('auth-session')">
+      <div class="module-header">
+        <div>
+          <span class="module-name">AUTH &amp; SESSION</span>
+          <p>Session hardening and browser-facing auth controls inferred from discovered response headers.</p>
+        </div>
+        <span class="module-badge risk-badge" [ngClass]="riskClass(authSessionRiskLevel())">{{ authSessionRiskLevel() }} RISK</span>
+      </div>
+
+      <div class="signal-lists three-up">
+        <article class="signal-group">
+          <span class="signal-title">PRESENT CONTROLS</span>
+          <div class="signal-chip-wrap" *ngIf="authSessionPresentControls().length > 0; else noAuthControls">
+            <span class="signal-chip" *ngFor="let control of authSessionPresentControls()">{{ control }}</span>
+          </div>
+        </article>
+
+        <article class="signal-group">
+          <span class="signal-title">MISSING CONTROLS</span>
+          <div class="signal-chip-wrap" *ngIf="authSessionMissingControls().length > 0; else noAuthMissing">
+            <span class="signal-chip signal-chip-warning" *ngFor="let control of authSessionMissingControls()">{{ control }}</span>
+          </div>
+        </article>
+
+        <article class="signal-group">
+          <span class="signal-title">COOKIE SIGNALS</span>
+          <div class="signal-chip-wrap" *ngIf="authSessionCookieSignals().length > 0; else noCookieSignals">
+            <span class="signal-chip" *ngFor="let signal of authSessionCookieSignals()">{{ signal }}</span>
+          </div>
+        </article>
+      </div>
+
+      <ng-template #noAuthControls>
+        <div class="signal-empty">No auth/session control headers were detected.</div>
+      </ng-template>
+      <ng-template #noAuthMissing>
+        <div class="signal-empty">No missing auth/session controls flagged from this signal set.</div>
+      </ng-template>
+      <ng-template #noCookieSignals>
+        <div class="signal-empty">No cookie-level header traces were detected.</div>
+      </ng-template>
+    </section>
+
+    <section class="module-section" *ngIf="shouldShow('client-side')">
+      <div class="module-header">
+        <div>
+          <span class="module-name">CLIENT SIDE</span>
+          <p>Frontend framework, static asset, and browser-consumable route traces with fast risk heuristics.</p>
+        </div>
+        <span class="module-badge">{{ clientSideFrameworkSignals().length + clientSideAssetSignals().length + clientSideRouteSignals().length }} SIGNALS</span>
+      </div>
+
+      <div class="signal-lists three-up">
+        <article class="signal-group">
+          <span class="signal-title">FRAMEWORK SIGNALS</span>
+          <div class="signal-chip-wrap" *ngIf="clientSideFrameworkSignals().length > 0; else noClientFrameworks">
+            <span class="signal-chip" *ngFor="let framework of clientSideFrameworkSignals()">{{ framework }}</span>
+          </div>
+        </article>
+
+        <article class="signal-group">
+          <span class="signal-title">ASSET CLUES</span>
+          <div class="signal-chip-wrap" *ngIf="clientSideAssetSignals().length > 0; else noClientAssets">
+            <span class="signal-chip" *ngFor="let clue of clientSideAssetSignals()">{{ clue }}</span>
+          </div>
+        </article>
+
+        <article class="signal-group">
+          <span class="signal-title">PUBLIC ROUTE TRACES</span>
+          <div class="signal-chip-wrap" *ngIf="clientSideRouteSignals().length > 0; else noClientRoutes">
+            <span class="signal-chip" *ngFor="let route of clientSideRouteSignals()">{{ route }}</span>
+          </div>
+        </article>
+      </div>
+
+      <div class="warnings-box">
+        <span class="signal-title">HEURISTIC WARNINGS</span>
+        <div class="warning-item" *ngFor="let warning of clientSideWarnings()">{{ warning }}</div>
+      </div>
+
+      <ng-template #noClientFrameworks>
+        <div class="signal-empty">No explicit frontend frameworks were identified.</div>
+      </ng-template>
+      <ng-template #noClientAssets>
+        <div class="signal-empty">No client-focused asset clues were detected.</div>
+      </ng-template>
+      <ng-template #noClientRoutes>
+        <div class="signal-empty">No public client route traces were detected.</div>
+      </ng-template>
+    </section>
+
+    <section class="module-section" *ngIf="shouldShow('dns')">
       <div class="module-header">
         <div>
           <span class="module-name">DNS ENUMERATION</span>
@@ -80,7 +248,7 @@
       <app-recon-dns-results [dns]="results.dns"></app-recon-dns-results>
     </section>
 
-    <section class="module-section">
+    <section class="module-section" *ngIf="shouldShow('subdomains')">
       <div class="module-header">
         <div>
           <span class="module-name">SUBDOMAINS</span>
@@ -91,7 +259,7 @@
       <app-recon-subdomains-results [subdomains]="results.subdomains"></app-recon-subdomains-results>
     </section>
 
-    <section class="module-section">
+    <section class="module-section" *ngIf="shouldShow('apis')">
       <div class="module-header">
         <div>
           <span class="module-name">API DISCOVERY</span>
@@ -102,7 +270,7 @@
       <app-recon-api-results [apis]="results.apis"></app-recon-api-results>
     </section>
 
-    <section class="module-section">
+    <section class="module-section" *ngIf="shouldShow('headers')">
       <div class="module-header">
         <div>
           <span class="module-name">SECURITY HEADERS</span>
@@ -113,7 +281,7 @@
       <app-recon-headers-results [headers]="results.headers"></app-recon-headers-results>
     </section>
 
-    <section class="module-section">
+    <section class="module-section" *ngIf="shouldShow('tech')">
       <div class="module-header">
         <div>
           <span class="module-name">TECH STACK</span>

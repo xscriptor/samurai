@@ -1,7 +1,7 @@
 .export-actions {
   display: flex;
   gap: var(--space-sm);
-  justify-content: flex-end;
+  justify-content: flex-start;
   flex-wrap: wrap;
 }
 
@@ -40,6 +40,6 @@
 
 @media (max-width: 900px) {
   .export-actions {
-    justify-content: center;
+    justify-content: flex-start;
   }
 }

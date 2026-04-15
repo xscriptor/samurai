@@ -21,4 +21,14 @@
   <app-recon-terminal [lines]="terminalLines" [isScanning]="isScanning"></app-recon-terminal>
 
   <app-recon-results [results]="reconResults"></app-recon-results>
+
+  <section class="recon-export-zone" *ngIf="reconResults">
+    <app-recon-export-actions
+      [hasExports]="!!reconResults"
+      (exportCsv)="exportReconAsCsv()"
+      (exportJson)="exportReconAsJson()"
+      (exportPdf)="exportReconAsPdf()"
+      (exportBinary)="exportReconAsBinary()"
+    ></app-recon-export-actions>
+  </section>
 </div>

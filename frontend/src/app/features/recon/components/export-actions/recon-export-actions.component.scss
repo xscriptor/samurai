@@ -1,0 +1,45 @@
+.export-actions {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.export-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--border-visible);
+  background-color: transparent;
+  color: var(--text-secondary);
+  padding: var(--space-sm) var(--space-md);
+  font-family: var(--font-data);
+  font-size: var(--label);
+  min-height: 40px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  .export-icon {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    transition: color 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    color: #FFD700;
+    border-color: #FFD700;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+@media (max-width: 900px) {
+  .export-actions {
+    justify-content: center;
+  }
+}

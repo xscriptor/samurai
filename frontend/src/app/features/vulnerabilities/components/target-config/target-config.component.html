@@ -2,8 +2,10 @@
   <h2 class="t-heading">TARGET_URL</h2>
 
   <div class="input-group">
-    <label class="t-label">FULL ENDPOINT URL</label>
+    <label class="t-label" for="vuln-target-url">FULL ENDPOINT URL</label>
     <input
+      id="vuln-target-url"
+      name="vuln-target-url"
       type="text"
       [ngModel]="targetUrl"
       (ngModelChange)="targetUrlChange.emit($event)"
@@ -21,6 +23,8 @@
         [class.active]="activeModules[module.key]"
         [disabled]="isScanning"
         (click)="moduleToggle.emit(module.key)"
+        [attr.aria-pressed]="activeModules[module.key]"
+        [attr.aria-label]="'Toggle module ' + module.label"
       >
         <span class="t-label">{{ module.label }}</span>
         <span class="chip-help">{{ module.description }}</span>
@@ -39,16 +43,18 @@
     </div>
   </div>
 
-  <div class="auth-config" *ngIf="activeModules['auth_scan']">
+  <div class="auth-config" *ngIf="activeModules['auth_scan']" role="group" aria-labelledby="auth-context-title">
     <div class="auth-header">
-      <label class="t-label">AUTHENTICATED SCAN CONTEXT</label>
+      <span id="auth-context-title" class="t-label">AUTHENTICATED SCAN CONTEXT</span>
       <span class="chip-help">Optional. If empty, the scan runs unauthenticated boundary checks only.</span>
     </div>
 
     <div class="auth-grid">
       <div class="input-group compact full-row">
-        <label class="t-label">AUTH PRIORITY</label>
+        <label class="t-label" for="auth-priority">AUTH PRIORITY</label>
         <select
+          id="auth-priority"
+          name="auth-priority"
           [ngModel]="authScanConfig.authMode"
           (ngModelChange)="patchAuthScanConfig({ authMode: $event })"
           [disabled]="isScanning"
@@ -59,8 +65,10 @@
       </div>
 
       <div class="input-group compact">
-        <label class="t-label">BEARER TOKEN</label>
+        <label class="t-label" for="auth-bearer-token">BEARER TOKEN</label>
         <input
+          id="auth-bearer-token"
+          name="auth-bearer-token"
           type="password"
           [ngModel]="authScanConfig.bearerToken"
           (ngModelChange)="patchAuthScanConfig({ bearerToken: $event })"
@@ -71,8 +79,10 @@
       </div>
 
       <div class="input-group compact">
-        <label class="t-label">BASIC USER</label>
+        <label class="t-label" for="auth-basic-user">BASIC USER</label>
         <input
+          id="auth-basic-user"
+          name="auth-basic-user"
           type="text"
           [ngModel]="authScanConfig.basicUser"
           (ngModelChange)="patchAuthScanConfig({ basicUser: $event })"
@@ -82,8 +92,10 @@
       </div>
 
       <div class="input-group compact">
-        <label class="t-label">BASIC PASSWORD</label>
+        <label class="t-label" for="auth-basic-password">BASIC PASSWORD</label>
         <input
+          id="auth-basic-password"
+          name="auth-basic-password"
           type="password"
           [ngModel]="authScanConfig.basicPass"
           (ngModelChange)="patchAuthScanConfig({ basicPass: $event })"
@@ -94,8 +106,10 @@
       </div>
 
       <div class="input-group compact full-row">
-        <label class="t-label">COOKIE HEADER</label>
+        <label class="t-label" for="auth-cookie-header">COOKIE HEADER</label>
         <input
+          id="auth-cookie-header"
+          name="auth-cookie-header"
           type="text"
           [ngModel]="authScanConfig.cookieHeader"
           (ngModelChange)="patchAuthScanConfig({ cookieHeader: $event })"
@@ -107,7 +121,7 @@
     </div>
   </div>
 
-  <button class="btn-primary destructive" (click)="initiate.emit()" [disabled]="isScanning">
+  <button type="button" class="btn-primary destructive" (click)="initiate.emit()" [disabled]="isScanning" aria-label="Initiate DAST scan">
     {{ isScanning ? 'DAST SCAN IN PROGRESS' : 'INITIATE DAST SCAN' }}
   </button>
 </section>

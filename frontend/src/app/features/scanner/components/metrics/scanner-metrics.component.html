@@ -1,30 +1,30 @@
 <section class="panel">
-  <div class="metric-grid">
-    <div class="hero-metric">
+  <div class="metric-grid" role="list" aria-label="Scanner key metrics">
+    <div class="hero-metric" role="listitem" aria-label="Ports found metric">
       <span class="t-label">PORTS_FOUND</span>
-      <span class="t-display-xl">{{ vulnerabilitiesFound }}</span>
+      <span class="t-display-xl" [attr.aria-label]="'Ports found: ' + vulnerabilitiesFound">{{ vulnerabilitiesFound }}</span>
     </div>
 
-    <div class="hero-metric">
+    <div class="hero-metric" role="listitem" aria-label="Contact artifacts metric">
       <span class="t-label">CONTACT_ARTIFACTS</span>
-      <span class="t-display-xl">{{ contactsFound }}</span>
+      <span class="t-display-xl" [attr.aria-label]="'Contact artifacts: ' + contactsFound">{{ contactsFound }}</span>
     </div>
 
-    <div class="hero-metric">
+    <div class="hero-metric" role="listitem" aria-label="Unsanitized surfaces metric">
       <span class="t-label">UNSANITIZED_SURFACES</span>
-      <span class="t-display-xl">{{ unsanitizedFindings }}</span>
+      <span class="t-display-xl" [attr.aria-label]="'Unsanitized surfaces: ' + unsanitizedFindings">{{ unsanitizedFindings }}</span>
     </div>
 
-    <div class="hero-metric">
+    <div class="hero-metric" role="listitem" aria-label="Open ports delta metric">
       <span class="t-label">DELTA_OPEN_PORTS</span>
-      <span class="t-display-xl">{{ latestOpenPortDelta === null ? '-' : latestOpenPortDelta }}</span>
+      <span class="t-display-xl" [attr.aria-label]="latestOpenPortDelta === null ? 'Open ports delta unavailable' : 'Open ports delta: ' + latestOpenPortDelta">{{ latestOpenPortDelta === null ? '-' : latestOpenPortDelta }}</span>
     </div>
   </div>
 
   <div class="open-ports-wrap" *ngIf="openPortsDetailed.length">
     <span class="t-label">OPEN_PORTS_DETECTED</span>
-    <div class="open-ports-grid">
-      <div class="port-pill" *ngFor="let port of openPortsDetailed">
+    <div class="open-ports-grid" role="list" aria-label="Open ports detected">
+      <div class="port-pill" *ngFor="let port of openPortsDetailed" role="listitem" [attr.aria-label]="'Port ' + port.token + ', service ' + port.service + ', version ' + port.version">
         <span class="port-token">{{ port.token }}</span>
         <span class="port-service">{{ port.service }}</span>
         <span class="port-version">{{ port.version }}</span>

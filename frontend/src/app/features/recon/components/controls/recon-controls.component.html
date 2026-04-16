@@ -1,7 +1,9 @@
 <div class="recon-panel">
   <div class="control-group">
-    <label class="t-label">TARGET DOMAIN</label>
+    <label class="t-label" for="recon-target-domain">TARGET DOMAIN</label>
     <input
+      id="recon-target-domain"
+      name="recon-target-domain"
       type="text"
       [ngModel]="targetDomain"
       (ngModelChange)="onInput($event)"
@@ -9,6 +11,7 @@
       placeholder="example.com or https://example.com"
       class="input-field"
       [disabled]="isScanning"
+      aria-label="Target domain"
     />
   </div>
 
@@ -17,11 +20,14 @@
     <div class="modules-grid">
       <button
         *ngFor="let module of reconModules"
+        type="button"
         (click)="toggleModule.emit(module.id)"
         [class.selected]="selectedModules.includes(module.id)"
         [disabled]="isScanning"
         class="module-btn"
         [title]="module.description"
+        [attr.aria-label]="'Toggle module ' + module.label"
+        [attr.aria-pressed]="selectedModules.includes(module.id)"
       >
         <span class="module-icon">{{ module.icon }}</span>
         <span class="module-name">{{ module.label }}</span>
@@ -31,15 +37,15 @@
 
   <div class="quick-select">
     <span class="t-label">QUICK PRESETS:</span>
-    <button (click)="preset.emit('all')" [disabled]="isScanning" class="preset-btn">All Modules</button>
-    <button (click)="preset.emit('basic')" [disabled]="isScanning" class="preset-btn">Basic (DNS + Headers)</button>
-    <button (click)="preset.emit('api')" [disabled]="isScanning" class="preset-btn">API Focus</button>
+    <button type="button" (click)="preset.emit('all')" [disabled]="isScanning" class="preset-btn" aria-label="Select all reconnaissance modules">All Modules</button>
+    <button type="button" (click)="preset.emit('basic')" [disabled]="isScanning" class="preset-btn" aria-label="Select basic modules DNS and headers">Basic (DNS + Headers)</button>
+    <button type="button" (click)="preset.emit('api')" [disabled]="isScanning" class="preset-btn" aria-label="Select API-focused modules">API Focus</button>
   </div>
 
   <div class="action-group">
-    <button (click)="start.emit()" [disabled]="!targetDomain || isScanning" class="btn btn-primary">
+    <button type="button" (click)="start.emit()" [disabled]="!targetDomain || isScanning" class="btn btn-primary" aria-label="Start reconnaissance scan">
       {{ isScanning ? 'SCANNING...' : 'START RECONNAISSANCE' }}
     </button>
-    <button (click)="clear.emit()" [disabled]="isScanning" class="btn btn-secondary">CLEAR TERMINAL</button>
+    <button type="button" (click)="clear.emit()" [disabled]="isScanning" class="btn btn-secondary" aria-label="Clear terminal output">CLEAR TERMINAL</button>
   </div>
 </div>

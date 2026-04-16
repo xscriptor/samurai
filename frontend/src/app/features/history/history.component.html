@@ -1,7 +1,7 @@
 <div class="route-container">
   <header class="section-header">
     <div>
-      <h2 class="t-heading">ARCHIVE_HISTORY</h2>
+            <h1 class="t-heading">ARCHIVE_HISTORY</h1>
       <span class="t-label">PERSISTENT SCAN DATABASE</span>
     </div>
   </header>
@@ -10,13 +10,13 @@
     
     <!-- LEFT: Listado de Scans -->
     <section class="panel list-panel">
-        <h2 class="t-heading">SAVED_SCANS_LIST</h2>
+        <h2 class="t-heading" id="saved-scans-heading">SAVED_SCANS_LIST</h2>
         <div *ngIf="isLoading" class="t-label">Loading database...</div>
 
-        <div class="scan-card" *ngFor="let s of scans" (click)="openScanInModule(s)" [class.active]="selectedScan?.id === s.id">
+        <div class="scan-card" *ngFor="let s of scans" (click)="openScanInModule(s)" (keydown.enter)="openScanInModule(s)" (keydown.space)="openScanInModule(s); $event.preventDefault()" tabindex="0" role="button" [attr.aria-label]="'Open scan ' + s.id + ' for ' + s.domain_target" [class.active]="selectedScan?.id === s.id">
             <div class="scan-header">
                 <span class="t-label text-interactive">ID_#{{s.id}}</span>
-                <button class="btn-sm destructive" (click)="deleteScan(s.id, $event)">DELETE</button>
+                <button type="button" class="btn-sm destructive" (click)="deleteScan(s.id, $event)" [attr.aria-label]="'Delete scan ' + s.id">DELETE</button>
             </div>
             <div class="scan-body">
                 <span class="t-heading">{{s.domain_target}}</span>
@@ -60,7 +60,7 @@
                 <h4 class="t-label">DISCOVERED TOPOLOGY (CRAWLER)</h4>
                 
                 <details class="nothing-accordion" *ngFor="let link of selectedScan.discovered_links">
-                    <summary>
+                    <summary [attr.aria-label]="'Show findings for ' + link.url">
                         <span class="t-label">{{link.status_code}} HTTP</span>
                         <span class="t-body">{{link.url}}</span>
                         <span class="badge warning" *ngIf="link.findings?.length">! {{link.findings.length}} Issues</span>
@@ -74,7 +74,7 @@
                                <span *ngIf="vf.cvss_score" class="badge" style="margin-left: 0.5rem;">CVSS: {{vf.cvss_score}}</span>
                                <div *ngIf="vf.poc_payload" style="margin-top: 0.5rem;">
                                     <span class="t-label text-secondary">PROOF OF CONCEPT:</span>
-                                    <pre class="desc-box" style="white-space: pre-wrap;">{{vf.poc_payload}}</pre>
+                                 <pre class="desc-box" style="white-space: pre-wrap;" aria-label="Proof of concept payload">{{vf.poc_payload}}</pre>
                                </div>
                            </div>
                         </div>

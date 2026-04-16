@@ -31,13 +31,13 @@
 
   <div class="filter-bar">
     <div class="input-group">
-      <label class="t-label">SEARCH</label>
-      <input type="text" [(ngModel)]="searchText" (ngModelChange)="onFilterChanged()" placeholder="URL, finding, payload..." />
+      <label class="t-label" for="scanner-report-search">SEARCH</label>
+      <input id="scanner-report-search" name="scanner-report-search" type="text" [(ngModel)]="searchText" (ngModelChange)="onFilterChanged()" placeholder="URL, finding, payload..." />
     </div>
 
     <div class="input-group">
-      <label class="t-label">SEVERITY</label>
-      <select [(ngModel)]="severityFilter" (ngModelChange)="onFilterChanged()">
+      <label class="t-label" for="scanner-report-severity">SEVERITY</label>
+      <select id="scanner-report-severity" name="scanner-report-severity" [(ngModel)]="severityFilter" (ngModelChange)="onFilterChanged()">
         <option value="all">All severities</option>
         <option value="critical">Critical</option>
         <option value="high">High</option>
@@ -48,8 +48,8 @@
     </div>
 
     <div class="input-group">
-      <label class="t-label">SCOPE</label>
-      <select [(ngModel)]="scopeFilter" (ngModelChange)="onFilterChanged()">
+      <label class="t-label" for="scanner-report-scope">SCOPE</label>
+      <select id="scanner-report-scope" name="scanner-report-scope" [(ngModel)]="scopeFilter" (ngModelChange)="onFilterChanged()">
         <option value="all">All results</option>
         <option value="global">Global only</option>
         <option value="link">Per link only</option>
@@ -57,14 +57,14 @@
     </div>
 
     <div class="input-group">
-      <label class="t-label">TYPE</label>
-      <select [(ngModel)]="findingTypeFilter" (ngModelChange)="onFilterChanged()">
+      <label class="t-label" for="scanner-report-type">TYPE</label>
+      <select id="scanner-report-type" name="scanner-report-type" [(ngModel)]="findingTypeFilter" (ngModelChange)="onFilterChanged()">
         <option value="all">All types</option>
         <option *ngFor="let type of availableFindingTypes" [value]="type">{{ type }}</option>
       </select>
     </div>
 
-    <button type="button" class="filter-reset" (click)="clearFilters()">CLEAR FILTERS</button>
+    <button type="button" class="filter-reset" (click)="clearFilters()" aria-label="Clear all active scanner report filters">CLEAR FILTERS</button>
   </div>
 
   <div class="open-ports-wrap" *ngIf="openPortsDetailed.length">
@@ -113,7 +113,7 @@
   </div>
 
   <details class="link-accordion" *ngFor="let link of discoveredLinks">
-    <summary>
+    <summary [attr.aria-label]="'Toggle findings for ' + link.url">
       <div class="summary-info">
         <span class="t-label status-code">{{ link.status_code }} HTTP</span>
         <span class="t-label status-code host">{{ getHost(link.url) }}</span>

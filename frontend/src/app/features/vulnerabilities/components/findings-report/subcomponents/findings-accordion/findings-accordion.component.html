@@ -4,13 +4,13 @@
   </div>
 
   <details class="nothing-accordion" *ngFor="let link of filteredLinks">
-    <summary>
+    <summary [attr.aria-label]="'Toggle findings for ' + link.url">
       <div class="summary-info">
         <span class="t-label status-code" *ngIf="!link.isGlobal">{{ link.status_code }} HTTP</span>
         <span class="t-label status-code global" *ngIf="link.isGlobal">GLOBAL_SCOPE</span>
         <span class="t-body">{{ link.url }}</span>
       </div>
-      <span class="badge warning" *ngIf="link.findings.length">! {{ link.findings.length }} Issues</span>
+      <span class="badge warning" *ngIf="link.findings.length" [attr.aria-label]="link.findings.length + ' issues found'">! {{ link.findings.length }} Issues</span>
       <span class="badge success" *ngIf="!link.findings.length">Clean</span>
     </summary>
 

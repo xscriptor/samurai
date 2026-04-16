@@ -8,7 +8,7 @@
     <article class="hero-module dot-grid-subtle">
       <span class="t-label">TOTAL FINDINGS</span>
       <div class="hero-row">
-        <span class="t-display-lg t-data">{{ summary.totalFindings }}</span>
+        <span class="t-display-lg t-data" [attr.aria-label]="'Total findings: ' + summary.totalFindings">{{ summary.totalFindings }}</span>
         <span class="hero-unit t-label">ISSUES</span>
       </div>
       <div class="segment-line">
@@ -19,7 +19,7 @@
     <article class="instrument-module">
       <div class="instrument-head">
         <span class="t-label">RISK INDEX</span>
-        <span class="metric-value" [class.hot]="summary.riskScore >= 70" [class.warning]="summary.riskScore >= 40 && summary.riskScore < 70">
+        <span class="metric-value" [class.hot]="summary.riskScore >= 70" [class.warning]="summary.riskScore >= 40 && summary.riskScore < 70" [attr.aria-label]="'Risk index: ' + summary.riskScore + ' percent'">
           {{ summary.riskScore }}%
         </span>
       </div>

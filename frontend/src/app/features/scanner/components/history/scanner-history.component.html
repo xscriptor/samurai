@@ -1,11 +1,14 @@
 <section class="panel" *ngIf="scannerHistory.length">
   <h2 class="t-label">RECENT_SCANNER_RUNS</h2>
-  <div class="history-wrap">
+  <div class="history-wrap" role="list" aria-label="Recent scanner runs">
     <button
       type="button"
       class="history-row"
       *ngFor="let run of scannerHistory"
+      role="listitem"
       [class.selected]="run.id === selectedScanId"
+      [attr.aria-pressed]="run.id === selectedScanId"
+      [attr.aria-label]="'Load scan ' + run.id + ' for target ' + run.target"
       (click)="onSelectScan(run.id)"
     >
       <span class="t-label">#{{ run.id }}</span>

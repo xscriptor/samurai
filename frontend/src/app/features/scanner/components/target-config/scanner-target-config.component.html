@@ -2,13 +2,13 @@
   <h2 class="t-heading">TARGET_CONFIG</h2>
 
   <div class="input-group">
-    <label class="t-label">DOMAIN / IP</label>
-    <input type="text" [ngModel]="targetDomain" (ngModelChange)="targetDomainChange.emit($event)" [disabled]="isScanning">
+    <label class="t-label" for="scanner-target-domain">DOMAIN / IP</label>
+    <input id="scanner-target-domain" name="scanner-target-domain" type="text" [ngModel]="targetDomain" (ngModelChange)="targetDomainChange.emit($event)" [disabled]="isScanning">
   </div>
 
   <div class="input-group">
-    <label class="t-label">SCAN PROFILE</label>
-    <select [ngModel]="scanProfile" (ngModelChange)="scanProfileChange.emit($event)" [disabled]="isScanning">
+    <label class="t-label" for="scanner-scan-profile">SCAN PROFILE</label>
+    <select id="scanner-scan-profile" name="scanner-scan-profile" [ngModel]="scanProfile" (ngModelChange)="scanProfileChange.emit($event)" [disabled]="isScanning">
       <option value="quick">QUICK - Top 100 common ports</option>
       <option value="balanced">BALANCED - Top 1000 ports + service detection</option>
       <option value="deep">DEEP - Scripts + top 2000 ports</option>
@@ -17,8 +17,8 @@
   </div>
 
   <div class="input-group">
-    <label class="t-label">TIMEOUT (SECONDS)</label>
-    <input type="number" min="30" max="900" [ngModel]="scanTimeout" (ngModelChange)="scanTimeoutChange.emit($event)" [disabled]="isScanning">
+    <label class="t-label" for="scanner-timeout">TIMEOUT (SECONDS)</label>
+    <input id="scanner-timeout" name="scanner-timeout" type="number" min="30" max="900" [ngModel]="scanTimeout" (ngModelChange)="scanTimeoutChange.emit($event)" [disabled]="isScanning">
   </div>
 
   <div class="module-grid">
@@ -28,6 +28,8 @@
       [class.active]="webAppSurfaceScan"
       [disabled]="isScanning"
       (click)="webAppSurfaceScanChange.emit(!webAppSurfaceScan)"
+      [attr.aria-pressed]="webAppSurfaceScan"
+      aria-label="Toggle web app surface scan"
     >
       <span class="t-label">WEB APP SURFACE</span>
       <span class="chip-help">Crawl links and map app-layer exposure</span>
@@ -39,6 +41,8 @@
       [class.active]="collectContactIntel"
       [disabled]="isScanning || !webAppSurfaceScan"
       (click)="collectContactIntelChange.emit(!collectContactIntel)"
+      [attr.aria-pressed]="collectContactIntel"
+      aria-label="Toggle contact intelligence collection"
     >
       <span class="t-label">CONTACT INTEL</span>
       <span class="chip-help">Extract emails/phones per link</span>
@@ -50,6 +54,8 @@
       [class.active]="detectUnsanitizedInputs"
       [disabled]="isScanning || !webAppSurfaceScan"
       (click)="detectUnsanitizedInputsChange.emit(!detectUnsanitizedInputs)"
+      [attr.aria-pressed]="detectUnsanitizedInputs"
+      aria-label="Toggle unsanitized input detection"
     >
       <span class="t-label">UNSANITIZED INPUTS</span>
       <span class="chip-help">Detect unbounded fields and reflection surfaces</span>
@@ -57,16 +63,16 @@
   </div>
 
   <div class="input-group" *ngIf="webAppSurfaceScan">
-    <label class="t-label">MAX WEB PAGES</label>
-    <input type="number" min="1" max="40" [ngModel]="webMaxPages" (ngModelChange)="webMaxPagesChange.emit($event)" [disabled]="isScanning">
+    <label class="t-label" for="scanner-max-web-pages">MAX WEB PAGES</label>
+    <input id="scanner-max-web-pages" name="scanner-max-web-pages" type="number" min="1" max="40" [ngModel]="webMaxPages" (ngModelChange)="webMaxPagesChange.emit($event)" [disabled]="isScanning">
   </div>
 
   <div class="action-row">
-    <button class="btn-primary destructive" (click)="initiate.emit()" [disabled]="isScanning">
+    <button type="button" class="btn-primary destructive" (click)="initiate.emit()" [disabled]="isScanning" aria-label="Initiate scan run">
       {{ isScanning ? 'SCAN IN PROGRESS' : 'INITIATE SCAN' }}
     </button>
 
-    <button class="btn-secondary" (click)="cancel.emit()" [disabled]="!isScanning || !currentScanId">
+    <button type="button" class="btn-secondary" (click)="cancel.emit()" [disabled]="!isScanning || !currentScanId" aria-label="Cancel active scan run">
       CANCEL RUN
     </button>
   </div>

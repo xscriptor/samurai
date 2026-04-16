@@ -1,12 +1,12 @@
 <div class="terminal-container">
   <div class="terminal-header">
     <span class="t-label">[ X OUTPUT ]</span>
-    <span class="status-indicator" [class.active]="isScanning">{{ isScanning ? 'LIVE' : 'IDLE' }}</span>
+    <span class="status-indicator" [class.active]="isScanning" aria-live="polite">{{ isScanning ? 'LIVE' : 'IDLE' }}</span>
   </div>
-  <div class="terminal">
-    <div class="terminal-content">
+  <div class="terminal" aria-live="polite" aria-atomic="false">
+    <div class="terminal-content" role="log" aria-label="Recon terminal output">
       <div *ngFor="let line of lines" class="terminal-line">{{ line }}</div>
-      <div *ngIf="isScanning" class="cursor">_</div>
+      <div *ngIf="isScanning" class="cursor" aria-hidden="true">_</div>
     </div>
   </div>
 </div>

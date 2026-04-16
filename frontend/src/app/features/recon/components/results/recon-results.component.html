@@ -1,4 +1,4 @@
-<section *ngIf="results" class="results-container">
+<section *ngIf="results" class="results-container" aria-label="Reconnaissance results">
   <header class="results-header">
     <div>
       <h3 class="t-label">[ RECON RESULTS ]</h3>
@@ -11,7 +11,7 @@
   </header>
 
   <div class="overview-grid" *ngIf="isAllView()">
-    <article class="hero-panel dot-grid-subtle">
+    <article class="hero-panel dot-grid-subtle" aria-label="Primary signal metrics">
       <span class="t-label">PRIMARY SIGNAL</span>
       <div class="hero-value">
         <span class="value">{{ availableSections() }}</span>
@@ -19,7 +19,7 @@
       </div>
       <p class="hero-copy">modules produced actionable output</p>
       <div class="hero-divider"></div>
-      <div class="hero-rows">
+      <div class="hero-rows" role="list" aria-label="Primary signal breakdown">
         <div class="hero-row">
           <span class="metric-label">SURFACE HOSTS</span>
           <span class="metric-value">{{ surfaceHosts().length }}</span>
@@ -115,21 +115,21 @@
       <div class="signal-lists">
         <article class="signal-group">
           <span class="signal-title">HOST INVENTORY</span>
-          <div class="signal-chip-wrap" *ngIf="surfaceHosts().length > 0; else noSurfaceHosts">
+          <div class="signal-chip-wrap" *ngIf="surfaceHosts().length > 0; else noSurfaceHosts" role="list" aria-label="Host inventory list">
             <span class="signal-chip" *ngFor="let host of surfaceHosts()">{{ host }}</span>
           </div>
         </article>
 
         <article class="signal-group">
           <span class="signal-title">DISCOVERED ENDPOINTS</span>
-          <div class="signal-chip-wrap" *ngIf="surfaceEndpoints().length > 0; else noSurfaceEndpoints">
+          <div class="signal-chip-wrap" *ngIf="surfaceEndpoints().length > 0; else noSurfaceEndpoints" role="list" aria-label="Discovered endpoints list">
             <span class="signal-chip" *ngFor="let endpoint of surfaceEndpoints()">{{ endpoint }}</span>
           </div>
         </article>
 
         <article class="signal-group">
           <span class="signal-title">TECH CLUES</span>
-          <div class="signal-chip-wrap" *ngIf="surfaceTechSignals().length > 0; else noSurfaceTech">
+          <div class="signal-chip-wrap" *ngIf="surfaceTechSignals().length > 0; else noSurfaceTech" role="list" aria-label="Technology clues list">
             <span class="signal-chip" *ngFor="let signal of surfaceTechSignals()">{{ signal }}</span>
           </div>
         </article>

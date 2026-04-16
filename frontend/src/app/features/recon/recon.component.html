@@ -1,7 +1,7 @@
 <div class="route-container">
   <header class="section-header">
     <div>
-      <h2 class="t-heading">WEB_RECONNAISSANCE</h2>
+      <h1 class="t-heading">WEB_RECONNAISSANCE</h1>
       <span class="t-label">PASSIVE INTELLIGENCE GATHERING AND ENDPOINT MAPPING</span>
     </div>
   </header>
@@ -35,9 +35,11 @@
         <button
           *ngFor="let option of resultsViewOptions"
           type="button"
+          role="tab"
           class="btn-reset recon-filter-btn"
           [class.active]="activeResultsView === option.id"
           [attr.aria-selected]="activeResultsView === option.id"
+          [attr.aria-label]="'Show ' + option.label + ' results'"
           (click)="setResultsView(option.id)"
         >
           {{ option.label }}

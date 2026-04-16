@@ -1,7 +1,7 @@
-<section class="panel terminal-panel">
+<section class="panel terminal-panel" aria-live="polite" aria-atomic="false">
   <h2 class="t-label terminal-head">{{ title }}</h2>
-  <div class="nothing-term" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+  <div class="nothing-term" #scrollMe [scrollTop]="scrollMe.scrollHeight" role="log" aria-label="DAST terminal output">
     <pre *ngFor="let line of terminalLogs">{{ line }}</pre>
-    <div class="cursor" *ngIf="isScanning"></div>
+    <div class="cursor" *ngIf="isScanning" aria-hidden="true"></div>
   </div>
 </section>

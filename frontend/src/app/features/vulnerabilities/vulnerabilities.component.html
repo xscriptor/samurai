@@ -1,13 +1,13 @@
 <div class="route-container">
   <header class="section-header">
     <div>
-      <h2 class="t-heading">DAST_SCANNER</h2>
+      <h1 class="t-heading">DAST_SCANNER</h1>
       <span class="t-label">DYNAMIC APPLICATION SECURITY TESTING</span>
     </div>
 
     <div class="system-status">
       <div class="status-dot" [style.background-color]="isScanning ? 'var(--warning)' : 'var(--success)'"></div>
-      <span class="t-label">{{ isScanning ? 'CRAWLING...' : 'MODULE READY' }}</span>
+      <span class="t-label" aria-live="polite">{{ isScanning ? 'CRAWLING...' : 'MODULE READY' }}</span>
     </div>
   </header>
 

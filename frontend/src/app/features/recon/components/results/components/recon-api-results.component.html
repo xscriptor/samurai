@@ -24,16 +24,16 @@
       <span class="meta-value">{{ apis.documentation.join(', ') }}</span>
     </div>
 
-    <div class="endpoint-table" *ngIf="apis.apis_found.length > 0; else noEndpoints">
-      <div class="endpoint-head">
-        <span>PATH</span>
-        <span>STATUS</span>
-        <span>CONTENT TYPE</span>
+    <div class="endpoint-table" *ngIf="apis.apis_found.length > 0; else noEndpoints" role="table" aria-label="Discovered API endpoints">
+      <div class="endpoint-head" role="rowgroup">
+        <span role="columnheader">PATH</span>
+        <span role="columnheader">STATUS</span>
+        <span role="columnheader">CONTENT TYPE</span>
       </div>
-      <div *ngFor="let api of apis.apis_found" class="endpoint-row">
-        <span class="endpoint-path">{{ api.path }}</span>
-        <span class="endpoint-status" [class.ok]="statusTone(api.status) === 'ok'" [class.restricted]="statusTone(api.status) === 'restricted'" [class.redirect]="statusTone(api.status) === 'redirect'">{{ api.status }}</span>
-        <span class="endpoint-type">{{ api.content_type || 'unknown' }}</span>
+      <div *ngFor="let api of apis.apis_found" class="endpoint-row" role="row">
+        <span class="endpoint-path" role="cell">{{ api.path }}</span>
+        <span class="endpoint-status" role="cell" [class.ok]="statusTone(api.status) === 'ok'" [class.restricted]="statusTone(api.status) === 'restricted'" [class.redirect]="statusTone(api.status) === 'redirect'">{{ api.status }}</span>
+        <span class="endpoint-type" role="cell">{{ api.content_type || 'unknown' }}</span>
       </div>
     </div>
 

@@ -19,22 +19,22 @@ This file is formatted to be synced automatically with GitHub Issues using the `
 
 ## Deep Vulnerability Analysis Integration <!-- phase:vuln-analysis -->
 
-- [ ] Integrate SQLMap subprocess runner for automated SQL Injection vulnerability checks (#9)
-- [ ] Connect Nuclei vulnerability scanner templates to expand the footprint engine (#10)
-- [ ] Implement robust `stdout` parsing heuristics for automated Finding severity classification (#11)
-- [ ] Establish asynchronous fuzzing for directory and file brute-forcing (#12)
+- [x] Integrate SQLMap subprocess runner for automated SQL Injection vulnerability checks (#9)
+- [x] Connect Nuclei vulnerability scanner templates to expand the footprint engine (#10)
+- [/] Implement robust `stdout` parsing heuristics for automated Finding severity classification (#11)
+- [/] Establish asynchronous fuzzing for directory and file brute-forcing (#12)
 
 ## Headless Reconnaissance & Crawling <!-- phase:recon-crawler -->
 
-- [ ] Add headless browser nodes (Playwright) to execute JavaScript-heavy reconnaissance (#13)
-- [ ] Intercept, capture, and analyze XHR/Fetch network requests dynamically (#14)
-- [ ] Implement visual screenshot capture module for successfully resolved domains (#15)
-- [ ] Automate Site Topology mapping through recursive spider crawling (#16)
+- [/] Add headless browser nodes (Playwright) to execute JavaScript-heavy reconnaissance (#13)
+- [/] Intercept, capture, and analyze XHR/Fetch network requests dynamically (#14)
+- [x] Implement visual screenshot capture module for successfully resolved domains (#15)
+- [x] Automate Site Topology mapping through recursive spider crawling (#16)
 
 ## Security, Auth & Production Hardening <!-- phase:production-hardening -->
 
-- [ ] Wrap FastAPI backend routes with JWT Authentication middleware (#17)
-- [ ] Add RBAC (Role-Based Access Control) to restrict scan actions by user level (#18)
-- [ ] Implement Redis-based rate limiting to prevent application scan flooding (#19)
-- [ ] Setup scheduled recurrent scans via Celery Beat tasks (#20)
-- [ ] Develop exportable Executive Reports (PDF and CSV format) for compiled findings (#21)
+- [/] Wrap FastAPI backend routes with JWT Authentication middleware (#17)
+- [/] Add RBAC (Role-Based Access Control) to restrict scan actions by user level (#18)
+- [/] Implement Redis-based rate limiting to prevent application scan flooding (#19)
+- [/] Setup scheduled recurrent scans via Celery Beat tasks (#20)
+- [x] Develop exportable Executive Reports (PDF and CSV format) for compiled findings (#21)

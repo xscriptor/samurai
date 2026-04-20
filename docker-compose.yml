@@ -1,3 +1,18 @@
+x-backend-env: &backend-env
+  REDIS_URL: redis://redis:6379/0
+  DB_HOST: db
+  DB_NAME: samurai
+  DB_USER: postgres
+  DB_PASS: postgres
+  JWT_SECRET_KEY: ${JWT_SECRET_KEY:-change-me-in-production-generate-with-openssl-rand-hex-64}
+  JWT_EXPIRE_MINUTES: 60
+  FRONTEND_ORIGIN: http://localhost:4200
+
+x-backend-volumes: &backend-volumes
+  - ./backend/app:/app/app
+  - ./backend/alembic:/app/alembic
+  - ./backend/alembic.ini:/app/alembic.ini
+
 services:
   frontend:
     build:
@@ -15,24 +30,41 @@ services:
       context: ./backend
     ports:
       - "8000:8000"
-    volumes:
-      - ./backend/app:/app/app
-      - ./backend/alembic:/app/alembic
-      - ./backend/alembic.ini:/app/alembic.ini
-    environment:
-      - REDIS_URL=redis://redis:6379/0
-      - DB_HOST=db
-      - DB_NAME=samurai
-      - DB_USER=postgres
-      - DB_PASS=postgres
-      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-change-me-in-production-generate-with-openssl-rand-hex-64}
-      - JWT_EXPIRE_MINUTES=60
-      - FRONTEND_ORIGIN=http://localhost:4200
+    volumes: *backend-volumes
+    environment: *backend-env
     depends_on:
       redis:
         condition: service_started
       db:
         condition: service_healthy
+
+  celery_worker:
+    build:
+      context: ./backend
+    command: celery -A app.celery_app.celery_app worker --loglevel=info --concurrency=2
+    volumes: *backend-volumes
+    environment: *backend-env
+    depends_on:
+      redis:
+        condition: service_started
+      db:
+        condition: service_healthy
+      backend:
+        condition: service_started
+
+  celery_beat:
+    build:
+      context: ./backend
+    command: celery -A app.celery_app.celery_app beat --loglevel=info
+    volumes: *backend-volumes
+    environment: *backend-env
+    depends_on:
+      redis:
+        condition: service_started
+      db:
+        condition: service_healthy
+      backend:
+        condition: service_started
 
   redis:
     image: "redis:alpine"

@@ -1,9 +1,9 @@
 from datetime import datetime, timezone
 from typing import Any, Callable, Dict, List, Tuple
 
-from fastapi import WebSocket
 import asyncio
 
+from ..progress import ProgressSink
 from .logger import ReconStreamLogger
 from .modules import (
     run_api_discovery,
@@ -41,7 +41,7 @@ def _expand_modules(recon_types: List[str]) -> List[str]:
 async def perform_web_recon(
     target: str,
     recon_types: List[str],
-    websocket: WebSocket,
+    websocket: ProgressSink,
     timeout_seconds: int = 300,
 ) -> Dict[str, Any]:
     logger = ReconStreamLogger(websocket)

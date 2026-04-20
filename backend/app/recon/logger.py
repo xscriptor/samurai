@@ -1,11 +1,11 @@
 from datetime import datetime
 from typing import Any
 
-from fastapi import WebSocket
+from ..progress import ProgressSink
 
 
 class ReconStreamLogger:
-    def __init__(self, websocket: WebSocket) -> None:
+    def __init__(self, websocket: ProgressSink) -> None:
         self.websocket = websocket
 
     async def line(self, message: str) -> None:

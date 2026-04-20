@@ -1,6 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, catchError, of, tap } from 'rxjs';
+import { Observable, catchError, of, switchMap, tap } from 'rxjs';
 import { ApiConfigService } from '../api/api-config.service';
 import { environment } from '../../../environments/environment';
 
@@ -48,7 +48,16 @@ export class AuthService {
 
     return this.http
       .post<LoginResponse>(this.api.http('/api/auth/login'), body.toString(), { headers })
-      .pipe(tap((response) => this.setToken(response.access_token)));
+      .pipe(
+        tap((response) => this.setToken(response.access_token)),
+        switchMap((response) =>
+          this.fetchCurrentUser().pipe(
+            catchError(() => of(null)),
+            tap(() => undefined),
+            switchMap(() => of(response))
+          )
+        )
+      );
   }
 
   fetchCurrentUser(): Observable<CurrentUser | null> {

@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 from fastapi import WebSocket
 from sqlalchemy.orm import Session
 from . import models
+from .progress import ProgressSink
 
 PORT_OPEN_PATTERN = re.compile(r"^(\d+)\/(tcp|udp)\s+open\s+([^\s]+)(?:\s+(.*))?$", re.IGNORECASE)
 
@@ -106,7 +107,7 @@ def _build_reflection_probe_url(current_url: str):
 async def _run_web_surface_scan(
     base_target: str,
     scan_record: models.Scan,
-    websocket: WebSocket,
+    websocket: ProgressSink,
     db: Session,
     collect_contacts: bool,
     scan_unsanitized: bool,
@@ -238,7 +239,7 @@ async def _run_web_surface_scan(
 
 async def perform_nmap_scan(
     target: str,
-    websocket: WebSocket,
+    websocket: ProgressSink,
     db: Session,
     profile: str = "quick",
     timeout_seconds: int = 180,

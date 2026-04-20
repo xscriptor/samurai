@@ -10,6 +10,7 @@ from urllib.parse import urljoin, urlparse
 from fastapi import WebSocket
 from sqlalchemy.orm import Session
 from . import models
+from .progress import ProgressSink
 
 # Configuración de payloads de Prueba
 SENSITIVE_PATHS = [
@@ -108,7 +109,7 @@ def _build_auth_headers(auth_context: dict | None):
 
     return headers
 
-async def audit_ssl(target_url: str, scan_record: models.Scan, websocket: WebSocket, db: Session):
+async def audit_ssl(target_url: str, scan_record: models.Scan, websocket: ProgressSink, db: Session):
     parsed = urlparse(target_url)
     domain = parsed.netloc
     if ":" in domain:
@@ -734,7 +735,7 @@ async def inspect_playwright_surface(soup, current_url, link_id, scan_id, websoc
         await websocket.send_text(f"    [!] HIGH: Potential internal endpoint references were exposed in JS.")
 
 
-async def perform_crawl(target_url: str, modules: str, websocket: WebSocket, db: Session, auth_context: dict | None = None):
+async def perform_crawl(target_url: str, modules: str, websocket: ProgressSink, db: Session, auth_context: dict | None = None):
     if not target_url.startswith("http"):
         target_url = "http://" + target_url
 
